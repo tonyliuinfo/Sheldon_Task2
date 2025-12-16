@@ -1,0 +1,371 @@
+<html>
+
+<head>
+    <%- include('partials/navbar2.ejs') %>
+        <%- include('partials/header1.ejs') %>
+            <title>Shopping</title>
+            <hr class="page-separator">
+</head>
+
+<style>
+    body {
+        background: black;
+        color: white;
+        font-family: Arial;
+    }
+
+    .page-separator {
+        border: none;
+        border-bottom: 2px solid #fff;
+        /* white line */
+        margin: 0;
+        /* no extra spacing */
+    }
+
+    /* Sidebar */
+    .sidebar {
+        padding: 20px;
+        height: 490px;
+        /* or set a fixed height like 300px */
+        width: 320px;
+        position: sticky;
+        top: 40px;
+        background: #111;
+        border-radius: 12px;
+        border: 2px solid #fff;
+        box-shadow: 0 0 10px #fff;
+        margin-top: 40px;
+    }
+
+    .sidebar h2 {
+        text-align: left;
+        color: #ffffff;
+        font-size: 18px;
+        margin-top: 0;
+        /* Remove default top spacing */
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar li {
+        margin: 25px 0;
+    }
+
+    .sidebar a {
+        color: #ffffff;
+        /* base text color */
+        text-decoration: none;
+        font-size: 18px;
+        display: block;
+        margin-bottom: 15px;
+
+        /* Glow effect */
+        text-shadow:
+            0 0 5px #fff,
+            /* small inner glow */
+            0 0 10px #fff,
+            /* medium glow */
+            0 0 20px #777;
+        /* outer soft glow */
+
+    }
+
+    /* Optional: stronger glow on hover */
+    .sidebar a:hover {
+        text-shadow:
+            0 0 10px #fff,
+            0 0 20px #fff,
+            0 0 30px rgb(255, 255, 255);
+        /* neon effect */
+        color: rgb(0, 0, 0);
+        transform: scale(1.05);
+    }
+
+    /* Product area */
+    .container {
+        width: 100%;
+        display: flex;
+        align-items: flex-start;
+        /* align sidebar + main product at top */
+        max-width: none;
+        margin: 20px auto;
+        /* closer to navbar */
+        gap: 20px;
+    }
+
+    .product-main {
+        flex: 1;
+        display: flex;
+        flex-direction: row;
+        /* image on left, info on right */
+        gap: 20px;
+        margin: 0;
+        /* reset margin */
+    }
+
+    .product-area {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-left: 150px;
+    }
+
+    .product-top {
+        display: flex;
+        gap: 40px;
+    }
+
+    /* Main image + thumbnails */
+    .image-gallery {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin: 0;
+        /* remove default margin/padding */
+    }
+
+    .main-image {
+        width: 400px;
+        height: auto;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 2px solid #fff;
+        box-shadow: 0 0 10px #fff;
+        margin-top: 40px;
+    }
+
+    .thumbnails {
+        display: flex;
+        gap: 10px;
+    }
+
+    .thumbnail img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border: 2px solid #fff;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .thumbnail img:hover {
+        box-shadow: 0 0 10px #fff;
+        transform: scale(1.05);
+    }
+
+    /* Product info */
+    .product-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .product-info h1 {
+        margin: 0;
+        font-size: 32px;
+    }
+
+    .price {
+        font-size: 28px;
+        color: #fff;
+    }
+
+    .quantity input {
+        width: 60px;
+        padding: 5px;
+        border-radius: 6px;
+        border: 1px solid #fff;
+        background: #000;
+        color: #fff;
+    }
+
+
+    .quantity input:focus {
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: #fff !important;
+        /* your original border */
+    }
+
+    /* Remove Chrome valid/invalid green/red borders */
+    .quantity input:valid,
+    .quantity input:invalid {
+        box-shadow: none !important;
+        border-color: #fff !important;
+        /* keep your white border */
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-group button {
+        padding: 12px 20px;
+        border-radius: 8px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        background: #fff;
+        color: #000;
+        transition: 0.2s;
+    }
+
+    .btn-group button:hover {
+        box-shadow: 0 0 20px #fff;
+        transform: scale(1.05);
+    }
+
+    .product-details {
+        margin-top: 10px;
+        background: #111;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid #fff;
+        box-shadow: 0 0 10px #fff;
+        max-width: 800px;
+    }
+
+    .product-details h3 {
+        font-size: 18px;
+        margin-top: 0px;
+    }
+
+    .product-details p {
+        font-size: 14px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+
+        $(".cart-btn").click(function () {
+
+            const productId = $(this).closest(".cart-form").data("product-id");
+
+            $.ajax({
+                url: '/add-to-cart',
+                type: 'POST',
+                data: { id: productId },
+
+                success: function (response) {
+                    if (response.success) {
+                        alert("Successfully added to cart!");
+                    }
+                },
+
+                error: function (xhr) {
+
+                    // 🔥 Detect 401 (not logged in)
+                    if (xhr.status === 401) {
+                        window.location.href = "/not-logged-in";
+                        return;
+                    }
+
+                    // Any other real error
+                    alert("Something went wrong with the server.");
+                }
+            });
+
+        });
+
+    });
+</script>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>CATEGORIES</h2>
+
+            <ul>
+                <li><a href="/shopping?cat=all">All Products</a></li>
+                <li><a href="/shopping?cat=accessories">Accessories</a></li>
+                <li><a href="/shopping?cat=books">Books</a></li>
+                <li><a href="/shopping?cat=clothes">Clothes</a></li>
+                <li><a href="/shopping?cat=figures">Figures</a></li>
+                <li><a href="/shopping?cat=plushies">Plushies</a></li>
+                <li><a href="/shopping?cat=posters">Posters</a></li>
+            </ul>
+        </div>
+
+
+        <div class="product-area">
+
+            <div class="product-top">
+                <!-- Images -->
+                <div class="image-gallery">
+                    <img class="main-image" src="/public/<%= product.image %>" alt="<%= product.name %>">
+
+                    <div class="thumbnails">
+                        <% if (product.images && product.images.length> 0) { %>
+                            <% product.images.forEach(img=> { %>
+                                <div class="thumbnail">
+                                    <img src="<%= img %>"
+                                        onclick="document.querySelector('.main-image').src='<%= img %>'">
+                                </div>
+                                <% }) %>
+                                    <% } %>
+                    </div>
+                </div>
+
+                <!-- Product info -->
+                <div class="product-info">
+                    <h1>
+                        <%= product.name %>
+                    </h1>
+                    <div class="price">$<%= product.price %>
+                    </div>
+
+                    <div class="quantity">
+                        Quantity: <input type="number" value="1" min="1">
+                    </div>
+
+                    <div class="btn-group">
+                        <form action="/buy-now" method="POST">
+                            <input type="hidden" name="product_id" value="<%= product.id %>">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="buy-btn">Buy Now</button>
+                        </form>
+
+                        <form class="cart-form" data-product-id="<%= product.id %>">
+                            <button type="button" class="cart-btn">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product details -->
+            <div class="product-details">
+                <h3>Product Details</h3>
+                <p>
+                    <%- product.description.replace(/\n/g, '<br>' ) %>
+                </p>
+            </div>
+
+        </div>
+</body>
+
+<script>
+    const qtyInput = document.querySelector('.quantity input');
+    const cartQty = document.getElementById('cart-qty');
+    const buyQty = document.getElementById('buy-qty');
+
+    qtyInput.addEventListener('change', () => {
+        const value = qtyInput.value;
+        cartQty.value = value;
+        buyQty.value = value;
+    });
+
+
+</script>
+
+</html>

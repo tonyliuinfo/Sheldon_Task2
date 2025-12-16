@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Two Line Navbar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    /* Top bar (logo + login/register) */
+    .top-bar {
+      background-color: rgb(255, 255, 255);
+      /* white background */
+      height: 120px;
+      /* custom height */
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      position: relative;
+    }
+
+    .left-links,
+    .right-links {
+      display: flex;
+      /* equal space left and right */
+      gap: 20px;
+    }
+
+    /* Site name / logo */
+    .site-name {
+      width: 80px;
+      /* desired width */
+      height: auto;
+      display: flex;
+      align-items: center;
+    }
+
+    .site-name a:hover {
+      transform: scale(1.3);
+      /* enlarge 30% */
+      transition: transform 0.3s ease;
+      /* smooth zoom animation */
+    }
+
+    .site-name2 {
+      color: #000000;
+      font-size: 80px;
+      /* bigger text */
+      font-family: 'Lobster', cursive;
+      /* elegant font */
+      font-weight: bold;
+      /* bold */
+      text-decoration: underline;
+      position: absolute;
+      /* ignore flex spacing */
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      /* perfectly centered horizontally */
+    }
+
+    /* Links in top bar */
+    .top-bar a {
+      color: #000000;
+      margin-left: 20px;
+      text-decoration: none;
+      font-size: 20px;
+      display: inline-block;
+      /* important for transform */
+    }
+
+    /* Zoom effect on hover */
+    .top-bar :hover {
+      transform: scale(1.3);
+      /* enlarge 30% */
+      transition: transform 0.3s ease;
+      /* smooth zoom animation */
+    }
+
+    /* Bottom nav (main links) */
+    .bottom-bar {
+      background-color: #000000;
+      /* lighter blue */
+      height: 80px;
+      /* different height */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .bottom-bar a {
+      color: white;
+      margin: 0 20px;
+      font-size: 18px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* Zoom effect on hover */
+    .bottom-bar a:hover {
+      display: inline-block;
+      transition: transform 0.3s ease;
+      transform: scale(1.3);
+      /* enlarge 30% */
+    }
+
+    .nav-cart-icon {
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .nav-cart-icon:hover {
+      color: #ccc;
+    }
+
+    .top-bar button {
+      background: none;
+      /* remove default button background */
+      border: none;
+      /* remove border */
+      color: #000000;
+      /* same color as links */
+      font-style: normal;
+      /* match login/register */
+      font-family: inherit;
+      /* match your font */
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 20px;
+      /* same spacing as links */
+    }
+
+    .top-bar button:hover {
+      transform: scale(1.3);
+      transition: transform 0.3s ease;
+    }
+
+    .right-links .user-name {
+      color: #000000;
+      /* same as links */
+      font-size: 20px;
+      /* match logout/login */
+      font-family: inherit;
+      /* same font as top-bar links */
+      margin-left: 50px;
+      /* spacing similar to links */
+      display: inline-block
+        /* needed for transform effect */
+    }
+
+    .right-links .happy-face {
+      font-size: 40px;
+      /* bigger than username */
+      /* aligns nicely with text */
+      margin-left: 0px;
+      /* small spacing */
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div class="left-links">
+      <a href="/"> <!-- Link to home page -->
+        <img class="site-name" src="/public/images/Logo1.png" alt="Bridal Veil Falls">
+      </a>
+    </div>
+    <div>
+      <span class="site-name2">Animajo</span>
+    </div>
+
+    <div class="right-links">
+      <% if (typeof session !=='undefined' && session.loggedin) { %>
+        <span class="user-name">
+          Welcome, <%= session.user.username %>
+        </span>
+        <a href="/logout">LOGOUT</a>
+        </form>
+        <% } else { %>
+          <a href="/login">LOGIN</a>
+          <a href="/register">REGISTER</a>
+          <% } %>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+<div class="bottom-bar" style="display: flex; align-items: center; justify-content: space-between; height: 80px; padding: 0 20px;">
+
+  <!-- Left spacer -->
+  <div class="left-spacer"></div>
+
+  <!-- Centered links -->
+  <div class="auth-links" style="display: flex; gap: 20px;">
+    <a href="/information">INFORMATION</a>
+    <a href="/community">COMMUNITY</a>
+    <a href="/shopping">SHOPPING</a>
+    <a href="/contact">CONTACT US</a>
+  </div>
+
+  <!-- Cart icon on the far right -->
+  <div class="cart-container">
+    <a id="cart-icon" class="nav-cart-icon">
+      <i class="fa-solid fa-cart-shopping"></i>
+    </a>
+  </div>
+
+</div>
+
+  <script>
+    $(document).ready(function () {
+      $("#cart-icon").click(function () {
+        $.ajax({
+          url: "/check-login",
+          method: "GET",
+          success: function (data) {
+            if (data.loggedin) {
+              window.location.href = "/cart";
+            } else {
+              window.location.href = "/not-logged-in";
+            }
+          },
+          error: function () {
+            window.location.href = "/not-logged-in";
+          }
+        });
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>

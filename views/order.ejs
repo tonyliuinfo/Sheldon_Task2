@@ -1,0 +1,143 @@
+<html>
+
+<head>
+    <%- include('partials/navbar2.ejs') %>
+        <%- include('partials/header1.ejs') %>
+            <title>Order Product</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background: #fff;
+                    color: #000;
+                    margin: 0;
+                    padding: 0;
+                }
+
+                .order-page {
+                    display: flex;
+                    /* Use flexbox */
+                    justify-content: center;
+                    /* Center horizontally */
+                    padding: 40px 20px;
+                    /* Optional padding around */
+                }
+
+                .order-summary {
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    padding: 20px;
+                    background: #f9f9f9;
+                    height: fit-content;
+                    width: 800px;
+                    /* Keeps summary narrow */
+                }
+
+
+                .order-summary h2 {
+                    margin-top: 0;
+                    font-size: 36px;
+                    font-weight: bold;
+                    color: #000
+                }
+
+                .product-item {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 15px;
+                    gap: 10px;
+                }
+
+                .product-item img {
+                    width: 80px;
+                    height: 150px;
+                    object-fit: cover;
+                    border-radius: 10px;
+                }
+
+                .product-info {
+                    flex: 1;
+                    display: flex;
+                    justify-content: space-between;
+                    font-weight: bold;
+                }
+
+                .totals {
+                    margin-top: 20px;
+                    font-size: 18px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                }
+
+                .checkout-btn {
+                    width: 100%;
+                    padding: 12px;
+                    background: #000;
+                    color: white;
+                    font-weight: bold;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    margin-top: 20px;
+                    outline: none;
+                    /* remove focus outline */
+                }
+
+                .checkout-btn:hover {
+                    opacity: 0.9;
+                }
+
+                .checkout-btn:focus,
+                .checkout-btn:active {
+                    background: #000;
+                    /* keep black even when clicked or focused */
+                    color: white;
+                    outline: none;
+                    /* remove outline on click */
+                }
+
+
+                h1 {
+                    text-align: center;
+                    margin-top: 30px;
+                    font-size: 48px;
+                }
+            </style>
+</head>
+
+<body>
+    <h1>Order Product</h1>
+
+    <!-- Centering container -->
+    <div class="order-page">
+        <div class="order-summary">
+            <h2>Your Order</h2>
+            <% products.forEach(item=> { %>
+                <div class="product-item">
+                    <img src="/public/<%= item.image %>" alt="<%= item.name %>">
+                    <div class="product-info">
+                        <span>
+                            <%= item.name %>
+                        </span>
+                        <span>x<%= item.qty %></span>
+                        <span>NZ$<%= (item.price * item.qty).toFixed(2) %></span>
+                    </div>
+                </div>
+                <% }) %>
+
+                    <div class="totals">
+                        <div>Shipping Fee: NZ$10</div>
+                        <div>
+                            <strong>Total: NZ$<%= (subtotal + 10).toFixed(2) %></strong>
+                        </div>
+                    </div>
+
+                    <form action="/checkout" method="POST">
+                        <button type="submit" class="checkout-btn">CHECK OUT</button>
+                    </form>
+        </div>
+    </div>
+</body>
+
+
+</html>

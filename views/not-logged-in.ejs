@@ -1,0 +1,52 @@
+<html>
+
+<head>
+    <%- include('partials/navbar1.ejs') %>
+        <%- include('partials/header1.ejs') %>
+            <title>Not Logged In</title>
+            <style>
+                body {
+                    background-color: #000;
+                    margin: 0;
+                    padding: 0;
+                    font-family: Arial;
+                }
+
+                .not-logged-in {
+                    max-width: 600px;
+                    margin: 50px auto;
+                    padding: 30px;
+                    background: #111;
+                    border: 2px solid #fff;
+                    border-radius: 12px;
+                    text-align: center;
+                    box-shadow: 0 0 10px #fff, 0 0 20px #ccc;
+                    color: #fff;
+                }
+
+                .not-logged-in a {
+                    color: #fff;
+                    font-weight: bold;
+                    font-size: 20px;
+                    text-decoration: underline;
+                }
+
+                .not-logged-in h2 {
+                    margin-bottom: 20px;
+                    color: rgb(253, 253, 253);
+                }
+
+                .not-logged-in p {
+                    color: rgb(253, 253, 253);
+                }
+            </style>
+</head>
+
+<body>
+    <div class="not-logged-in">
+        <h2>Oops! You’re not logged in.</h2>
+        <p>To add products to your cart, please <a href="/login">LOGIN</a> or <a href="/register">REGISTER</a>.</p>
+    </div>
+</body>
+
+</html>

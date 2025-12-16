@@ -1,0 +1,118 @@
+<html>
+
+<head>
+    <%- include('partials/navbar1.ejs') %>
+        <%- include('partials/header1.ejs') %>
+            <title>Contact_Us</title>
+            <hr class="page-separator">
+</head>
+
+<style>
+    body {
+        background-color: #000;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        color: #fff;
+    }
+
+    .page-separator {
+        border: none;
+        border-bottom: 2px solid #fff;
+        /* white line */
+        margin: 0;
+        /* no extra spacing */
+    }
+
+    .contact_us h1 {
+        text-align: center;
+        color: #ffffff;
+        margin-bottom: 30px;
+        font-style: initial;
+        font-size: 40px;
+    }
+
+    .contact-page {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 30px;
+        background: #111;
+        border: 2px solid #fff;
+        border-radius: 12px;
+        box-shadow: 0 0 10px #fff, 0 0 20px #ccc;
+    }
+
+    .contact-page form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .contact-page input,
+    .contact-page textarea {
+        padding: 5px;
+        margin: 20px 0;
+        border-radius: 8px;
+        border: none;
+        font-size: 16px;
+        background-color: #222;
+        /* dark background for inputs */
+        color: #fff;
+        /* text color */
+         height: 200px; 
+        resize: none; 
+    }
+
+    .contact-page button {
+        padding: 12px;
+        background: #fff;
+        color: #000;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+    }
+
+    .contact-page button:hover {
+        box-shadow: 0 0 10px #fff;
+        transform: scale(1.05);
+    }
+
+    .contact-info {
+        text-align: center;
+        margin-top: 30px;
+        font-size: 18px;
+    }
+
+    p {
+        color: rgb(255, 255, 255);
+        text-decoration: underline;
+    }
+
+    a {
+        color: rgb(255, 255, 255);
+        text-decoration: underline;
+    }
+</style>
+
+<body>
+    <div class="contact_us">
+        <h1>CONTACT US</h1>
+    </div>
+    <div class="contact-page">
+        <form action="/contact" method="POST">
+            <input type="text" name="first name" placeholder="Your First Name" required>
+            <input type="text" name="family name" placeholder="Your Family Name" required>
+            <input type="email" name="email" placeholder="Your Email" required>
+            <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+
+        <div class="contact-info">
+            <p>Email: <a href="mailto:info@example.com">info@example.com</a></p>
+            <p>Phone: +64 123 456 789</p>
+        </div>
+    </div>
+</body>
+
+</html>

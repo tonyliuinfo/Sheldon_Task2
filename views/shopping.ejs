@@ -1,0 +1,317 @@
+<html>
+
+<head>
+    <%- include('partials/navbar2.ejs') %>
+        <%- include('partials/header1.ejs') %>
+            <title>Shopping</title>
+</head>
+
+<style>
+    body {
+        background: rgb(255, 255, 255);
+        color: white;
+        margin: 0;
+        font-family: Arial;
+    }
+
+    .shopping h1 {
+        text-align: center;
+        color: #000000;
+        margin-bottom: 30px;
+        font-style: initial;
+        font-size: 40px;
+    }
+
+    .shop-container {
+        display: grid;
+        grid-template-columns: 320px 1fr;
+        /* Sidebar + product area */
+        padding: 20px;
+        gap: 40px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid #fff;
+        box-shadow: 0 0 15px #444;
+        height: 490px;
+        /* or set a fixed height like 300px */
+        width: 320px;
+        position: sticky;
+        top: 40px;
+    }
+
+    .sidebar h2 {
+        text-align: left;
+        color: #000000;
+        font-size: 18px;
+        margin-top: 0;
+        /* Remove default top spacing */
+        margin-bottom: 10px;
+        font-weight: bold;
+    }
+
+    .sidebar ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .sidebar li {
+        margin: 25px 0;
+    }
+
+    .sidebar a {
+        color: #000000;
+        /* base text color */
+        text-decoration: none;
+        font-size: 18px;
+        display: block;
+        margin-bottom: 15px;
+
+        /* Glow effect */
+        text-shadow:
+            0 0 5px #fff,
+            /* small inner glow */
+            0 0 10px #fff,
+            /* medium glow */
+            0 0 20px #777;
+        /* outer soft glow */
+
+    }
+
+    /* Optional: stronger glow on hover */
+    .sidebar a:hover {
+        text-shadow:
+            0 0 10px #fff,
+            0 0 20px #fff,
+            0 0 30px rgb(255, 255, 255);
+        /* neon effect */
+        color: rgb(0, 0, 0);
+        transform: scale(1.05);
+    }
+
+    /* Product Grid */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        /* EXACTLY 4 per row */
+        gap: 30px;
+    }
+
+    .product-card {
+        background: #dfdede2e;
+        padding: 15px;
+        text-align: center;
+        border-radius: 10px;
+        border: 2px solid #fff;
+        box-shadow: 0 0 15px #444;
+        transition: transform .2s;
+    }
+
+    .product-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 10px #777;
+    }
+
+    .product-card img {
+        width: 60%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    .product-card h3 {
+        text-align: center;
+        color: #000000;
+        font-style: initial;
+        font-size: 18px;
+    }
+
+    .product-card p {
+        text-align: center;
+        color: #000000;
+        font-style: initial;
+        font-size: 18px;
+    }
+
+    .product-buttons {
+        display: flex;
+        gap: 10px;
+        /* space between buttons */
+        justify-content: center;
+        align-items: center;
+        /* vertical alignment */
+        margin-top: 10px;
+    }
+
+    .product-buttons form {
+        display: inline-flex;
+        /* make forms behave like inline-flex boxes */
+        margin: 0;
+        padding: 0;
+    }
+
+    .product-buttons button {
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
+        border: none;
+        background: black;
+        color: white;
+        outline: none;
+        box-shadow: 0 0 5px #fff, 0 0 10px #fff;
+        transition: transform 0.2s;
+    }
+
+    .product-buttons button:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ccc, 0 0 25px #999;
+    }
+
+    .product-buttons button:focus,
+    .product-buttons button:active {
+        outline: none;
+        background: black;
+        /* stay black */
+        color: white;
+        /* stay white */
+        box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #ccc, 0 0 25px #999;
+    }
+
+
+    .empty-category {
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        font-size: 22px;
+        color: #555;
+        background: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px #999;
+    }
+
+    .empty-category h2 {
+        font-size: 30px;
+        margin-bottom: 10px;
+        text-align: center;
+        color: #000000;
+        font-style: initial;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $(".cart-btn").click(function () {
+
+            const productId = $(this).closest(".cart-form").data("product-id");
+
+            $.ajax({
+                url: '/add-to-cart',
+                type: 'POST',
+                data: { id: productId },
+
+                success: function (response) {
+                    if (response.success) {
+                        alert("Successfully added to cart!");
+                    }
+                },
+
+                error: function (xhr) {
+
+                    // 🔥 Detect 401 (not logged in)
+                    if (xhr.status === 401) {
+                        window.location.href = "/not-logged-in";
+                        return;
+                    }
+
+                    // Any other real error
+                    alert("Something went wrong with the server.");
+                }
+            });
+
+        });
+
+    });
+</script>
+
+
+<body>
+    <div class="Shopping">
+        <h1>ONLINE SHOPPING</h1>
+    </div>
+
+    <div class="shop-container">
+
+        <!-- LEFT CATEGORY SIDEBAR -->
+        <div class="sidebar">
+            <h2>CATEGORIES</h2>
+
+            <ul>
+                <li><a href="/shopping?cat=all">All Products</a></li>
+                <% categories.forEach(cat=> { %>
+                    <li><a href="/shopping?cat=<%= cat.id %>">
+                            <%= cat.name %>
+                        </a></li>
+                    <% }) %>
+            </ul>
+        </div>
+
+        <!-- PRODUCT GRID (4 PER ROW) -->
+        <div class="product-grid">
+
+            <% if (products.length===0) { %>
+                <div class="empty-category">
+                    <h2>Arriving Soon...</h2>
+                </div>
+                <% } else { %>
+
+                    <% products.forEach(product=> { %>
+
+                        <div class="product-card">
+
+                            <!-- Product main link -->
+                            <a href="/product/<%= product.id %>" class="product-link">
+                                <img src="<%= product.image %>" alt="<%= product.name %>">
+                                <h3>
+                                    <%= product.name %>
+                                </h3>
+                                <p>$<%= product.price %>
+                                </p>
+                            </a>
+
+                            <!-- Buy + Cart buttons -->
+                            <div class="product-buttons">
+
+                                <form action="/buy-now" method="POST">
+                                    <input type="hidden" name="product_id" value="<%= product.id %>">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="buy-btn">Buy Now</button>
+                                </form>
+
+                                <form class="cart-form" data-product-id="<%= product.id %>">
+                                    <button type="button" class="cart-btn">Add to Cart</button>
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                        <% }); %>
+
+                            <% } %>
+
+        </div>
+
+    </div>
+
+</body>
+
+
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+
+  <style>
+    body {
+        background-color:rgb(0, 0, 0);
+        }
+
+    .login-box {
+      width: 400px;
+      height: 600px;          /* square shape */
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0px 0px 50px rgba(255, 255, 255, 0.521);
+      padding: 40px 50px; /* ← inner space: top/bottom 40px, left/right 50px */
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin: 80px auto;
+    }
+    
+    .login-box h2 {
+      margin-bottom: 40px;
+    }
+    
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px; /* space between rows */
+    }
+    
+    .input-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .input-row label {
+      width: 30%;
+      text-align: right;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    .input-row input {
+      width: 65%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      width: 50%;
+      padding: 10px;
+      background-color: #000000;
+      color: white;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      font-size: 20px;
+      margin: 20px auto
+    }
+    
+    .remember {
+      text-align: left;
+      margin: 2px auto
+    }
+
+    .remember input[type="checkbox"] {
+      accent-color: black;
+    }
+
+    .register-btn {
+      background-color: black; /* black container */
+      color: white;            /* white text */
+      padding: 5px 12px;       /* space inside the button */
+      border-radius: 5px;      /* rounded corners */
+      text-decoration: none;   /* remove underline */
+      font-weight: bold;
+      margin-left: 5px;        /* optional spacing from text */
+    }
+  
+    .img-logo {
+      width: 130px;         /* change width (try 80px, 150px, etc.) */
+      height: auto;         /* keep aspect ratio */
+      margin: 50px auto;  /* center horizontally, add space below */
+      display: block;
+      transition: transform 0.3s ease;
+    }
+    
+    .img-logo:hover {
+      transform: scale(1.3); /* enlarge 30% */
+    }
+  </style>
+
+  <body>
+    <div class="login-box">
+      <div class="auth-links"></div>
+        <a href="/"> <!-- Link to home page -->
+          <img class="img-logo" src="/public/images/Logo1.png" alt="Bridal Veil Falls">
+        </a>
+    <h2>Welcome to Animojo</h2>
+    
+    <form class="modal-content animate" action="/auth/login" method="POST">
+      <div class="container">
+        <div class="input-row">
+          <label for="username"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="username" required>
+        </div>
+        
+        <div class="input-row">
+          <label for="password"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="password" required>
+        </div>
+        
+        <button type="submit">Log In</button>
+        
+        <label class="remember">
+          <input type="checkbox" checked="checked" name="remember"> Remember me
+        </label>
+        
+        <p>Don’t have an account? <a href="/register" class="register-btn">Register</a></p>
+      </div>
+    </form>
+  </body>
+</html>

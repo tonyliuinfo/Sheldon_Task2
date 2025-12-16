@@ -1,0 +1,212 @@
+<html>
+
+<head>
+  <%- include('partials/navbar2.ejs') %>
+    <%- include('partials/header1.ejs') %>
+      <title>Your Cart</title>
+
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          background: #fff;
+          color: #000;
+          margin: 0;
+          padding: 0;
+        }
+
+        .cart-page {
+          display: flex;
+          justify-content: space-between;
+          padding: 40px;
+          gap: 20px;
+        }
+
+        /* Left side: cart items */
+        .cart-items {
+          flex: 2;
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+        }
+
+        .cart-item {
+          display: flex;
+          align-items: center;
+          padding: 15px;
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          gap: 20px;
+          background: #f9f9f9;
+        }
+
+        .cart-item input[type="checkbox"] {
+          width: 20px;
+          height: 20px;
+        }
+
+        .cart-item img {
+          width: 120px;
+          height: 120px;
+          object-fit: cover;
+          border-radius: 10px;
+        }
+
+        .item-details {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .item-details p {
+          margin: 0;
+          font-size: 16px;
+        }
+
+        .item-quantity {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+
+        .item-quantity input.qty-input {
+          width: 50px;
+          padding: 5px;
+          text-align: center;
+          border-radius: 5px;
+          border: 1px solid #ccc;
+        }
+
+        .remove-btn {
+          color: #000000;
+          cursor: pointer;
+          text-decoration: underline;
+          background: none;
+          border: none;
+          font-size: 14px;
+        }
+
+        /* Right side: summary */
+        .cart-summary {
+          flex: 1;
+          border: 1px solid #ddd;
+          border-radius: 10px;
+          padding: 20px;
+          height: fit-content;
+        }
+
+        .cart-summary h2 {
+          margin-top: 0;
+          color: black;
+          font-weight: bold;
+          font-size: 38px;
+        }
+
+        .cart-summary p {
+          display: flex;
+          justify-content: space-between;
+          margin: 10px 0;
+          font-size: 16px;
+          color: black;
+          font-weight: bold;
+        }
+
+        .cart-summary button {
+          width: 100%;
+          padding: 12px;
+          background: #000000;
+          color: white;
+          font-weight: bold;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          margin-top: 20px;
+        }
+
+        .cart-summary button:hover {
+          opacity: 0.9;
+        }
+
+        h1 {
+          text-align: center;
+          margin-top: 30px;
+          font-size: 48px;
+        }
+
+        h3 {
+          text-align: center;
+          font-size: 48px;
+          color: #000
+        }
+      </style>
+
+</head>
+
+<body>
+  <h1>My Cart</h1>
+
+  <% if (!cart || cart.length===0) { %>
+    <h3>Your cart is empty.</h3>
+    <% } else { %>
+
+      <div class="cart-page">
+
+        <!-- Left: Cart Items -->
+        <div class="cart-items">
+
+          <% let subtotal=0; %>
+            <% cart.forEach((item, index)=> {
+              const total = Number(item.price) * Number(item.qty);
+              subtotal += total;
+              %>
+              <div class="cart-item">
+                <input type="checkbox">
+                <img src="/public/<%= item.image %>" alt="<%= item.name %>">
+                <div class="item-details">
+                  <p2><strong>
+                      <%= item.name %>
+                    </strong></p2>
+                  <p2>1 Set</p2>
+                  <p2>NZ$<%= (parseFloat(item.price) || 0).toFixed(2) %>
+                  </p2>
+                  <div class="item-quantity">
+                    <button type="button" onclick="this.nextElementSibling.stepDown();">-</button>
+                    <input type="number" name="quantities[<%= index %>]" value="<%= item.qty %>" min="1"
+                      class="qty-input">
+                    <button type="button" onclick="this.previousElementSibling.stepUp();">+</button>
+                  </div>
+                </div>
+                <button class="remove-btn" onclick="removeItem(<%= item.cart_id %>)">REMOVE</button>
+              </div>
+              <% }) %>
+        </div>
+
+        <!-- Right: Summary -->
+        <div class="cart-summary">
+          <h2>Order Summary</h2>
+          <p><span>Subtotal</span> <span>NZ$<%= subtotal.toFixed(2) %></span></p>
+          <p><span>Shipping</span> <span>$10</span></p>
+          <hr>
+          <p><strong>Total(<%= cart.length %>)</strong> <strong>NZ$<%= (subtotal + 10).toFixed(2) %></strong></p>
+          <form action="/order" method="GET">
+            <button type="submit">Confirm Order</button>
+          </form>
+        </div>
+
+      </div>
+
+      <% } %>
+
+        <script>
+
+          function removeItem(cartId) {
+            fetch(`/remove-from-cart/${cartId}`, {
+              method: 'POST'
+            })
+              .then(() => location.reload())
+              .catch(err => console.error(err));
+          }
+        </script>
+</body>
+
+</html>

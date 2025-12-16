@@ -1,0 +1,129 @@
+<html>
+
+<head>
+    <%- include('partials/navbar1.ejs') %>
+        <%- include('partials/header1.ejs') %>
+            <title>Community Page</title>
+
+            <hr class="page-separator">
+</head>
+<style>
+    .page-separator {
+        border: none;
+        border-bottom: 2px solid #fff;
+        /* white line */
+        margin: 0;
+        /* no extra spacing */
+    }
+
+    .community-widget {
+        max-width: 900px;
+        margin: 2rem auto;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #000;
+        padding: 10px;
+
+        border: 2px solid #fff;
+        box-shadow:
+            0 0 10px #777676,
+            0 0 20px #4e4e4e,
+            0 0 30px #333333;
+    }
+
+    .community-widget iframe {
+        width: 100%;
+        height: 600px;
+        border: none;
+        border-radius: 10px;
+    }
+
+    .community-page h1 {
+        text-align: center;
+        color: #ffffff;
+        margin-bottom: 30px;
+        font-style: initial;
+        font-size: 40px;
+    }
+
+    .welcome-box {
+        background: #000;
+        border: 2px solid #fff;
+        padding: 20px;
+        margin: 0 auto 30px auto;
+        max-width: 600px;
+        text-align: center;
+        border-radius: 12px;
+
+        /* White glow effect */
+        box-shadow: 0 0 10px #777676,
+            0 0 20px #4e4e4e,
+            0 0 30px #333333;
+    }
+
+    .welcome-box p {
+        color: white;
+        font-size: 20px;
+        margin: 0;
+    }
+
+    body {
+        background-color: #000;
+        margin: 0;
+        padding: 0;
+    }
+
+    .not-logged-in {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        background: #111;
+        border: 2px solid #fff;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 0 10px #fff, 0 0 20px #ccc;
+        color: #fff;
+    }
+
+    .not-logged-in a {
+        color: rgb(253, 253, 253);
+        font-weight: bold;
+        font-size: 20px;
+        text-decoration: underline;
+    }
+
+    .not-logged-in h2 {
+        color: rgb(253, 253, 253);
+    }
+
+    .not-logged-in p {
+        color: rgb(253, 253, 253);
+    }
+</style>
+
+<body>
+
+    <% if (user) { %>
+        <div class="community-page">
+            <h1>COMMUNITY</h1>
+            <div class="welcome-box">
+                <p>Kia ora, <%= user %>! Welcome to share ideas and resources below.</p>
+            </div>
+        </div>
+
+        <div class="community-widget">
+            <iframe src="https://discord.com/widget?id=1438428939033776244&theme=dark" width="350" height="500"
+                allowtransparency="true" frameborder="0"
+                sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+        </div>
+        <% } else { %>
+            <!-- Logged-out view -->
+            <div class="not-logged-in">
+                <h2>Oops! You’re not logged in.</h2>
+                <p>To access the community, please <a href="/login">LOGIN</a> or <a href="/register">REGISTER</a>.</p>
+            </div>
+            <% } %>
+
+</body>
+
+</html>

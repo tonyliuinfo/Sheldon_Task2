@@ -1,0 +1,16 @@
+h2 {
+    color:green;
+}
+h4 {
+    color:purple
+}
+
+.img {
+float: right;
+max-width: 15px;
+margin-left: 15px;
+}
+
+p {
+    color:rgb(238, 7, 7);
+}
